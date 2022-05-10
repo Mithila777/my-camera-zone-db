@@ -3,6 +3,7 @@ const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
+const bodyParser =require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -28,14 +29,57 @@ async function run() {
             res.send(cameras);
         });
 
-        app.get('/camara/:id', async(req, res) =>{
+        app.get('/camera/:id', async(req, res) =>{
             const id = req.params.id;
             const query={_id: ObjectId(id)};
-            const camera= await Collection.findOne(query);
+            const camera = await Collection.findOne(query);
             res.send(camera);
         });
-
+        
        
+        app.post('/camera', async(req, res) =>{
+            const newCamera = req.body;
+            console.log('adding new user', newCamera);
+            const result = await Collection.insertOne(newCamera);
+            res.send(result);
+            console.log(newCamera);
+        });
+
+
+        app.delete('/camera/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await Collection.deleteOne(query);
+            res.send(result);
+        });
+
+        app.put('/camera/:id', async(req, res) =>{
+            const id = req.params.id;
+            const updatedCamera = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    name: updatedCamera.name,
+                    description: updatedCamera.description,
+                    price: updatedCamera.price,
+                    img: updatedCamera.img,
+                    quantity: updatedCamera.quantity,
+                    supplier:updatedCamera.supplier,
+                    sold: updatedCamera.sold,
+
+
+                }
+
+        
+
+            };
+            const result = await Collection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+
+        })
+
+
 
     }
     finally {
