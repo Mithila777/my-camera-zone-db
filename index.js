@@ -39,7 +39,7 @@ async function run() {
        
         app.post('/camera', async(req, res) =>{
             const newCamera = req.body;
-            console.log('adding new user', newCamera);
+            console.log('add a new user', newCamera);
             const result = await Collection.insertOne(newCamera);
             res.send(result);
             console.log(newCamera);
