@@ -77,6 +77,8 @@ async function run() {
 
             };
             const result = await Collection.updateOne(filter, updatedDoc, options);
+            console.log('update a camera', result);
+
             res.send(result);
 
         })
