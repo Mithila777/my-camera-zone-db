@@ -98,7 +98,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) =>{
-    res.send('my server');
+    res.send('my api server');
 });
 
 app.listen(port, () =>{
